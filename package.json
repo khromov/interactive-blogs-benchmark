@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Benchmark harness comparing client JS and Core Web Vitals for interactive-blog frameworks (islands vs whole-page hydration).",
   "scripts": {
-    "benchmark": "node benchmark.mjs --out results/latest-run.md --json results/latest-run.json",
+    "benchmark": "node benchmark.mjs --gzip --out results/latest-run.md --json results/latest-run.json",
+    "benchmark:identity": "node benchmark.mjs --out results/latest-run.md --json results/latest-run.json",
     "setup:legacy": "bash scripts/setup-legacy.sh"
   },
   "dependencies": {
