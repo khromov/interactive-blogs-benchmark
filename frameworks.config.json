@@ -1,0 +1,14 @@
+{
+  "posts": [
+    { "id": "post1", "words": "8.8k", "path": "/posts/post1/" },
+    { "id": "post2", "words": "23k", "path": "/posts/post2/" },
+    { "id": "post3", "words": "71k", "path": "/posts/post3/" }
+  ],
+  "frameworks": [
+    { "name": "astro", "model": "Preact islands", "dist": "legacy/astro/dist" },
+    { "name": "iles", "model": "Preact islands", "dist": "legacy/iles/dist" },
+    { "name": "Mochi", "model": "Svelte 5 islands", "url": "http://localhost:3335" },
+    { "name": "SvelteKit latest", "model": "Svelte 5, whole-page", "dist": "frameworks/sveltekit-latest/build" },
+    { "name": "SvelteKit 2022", "model": "Svelte 3, whole-page", "dist": "legacy/sveltekit_mdsvex/build" }
+  ]
+}

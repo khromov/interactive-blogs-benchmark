@@ -1,0 +1,15 @@
+{
+  "name": "interactive-blogs-benchmark",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Benchmark harness comparing client JS and Core Web Vitals for interactive-blog frameworks (islands vs whole-page hydration).",
+  "scripts": {
+    "benchmark": "node benchmark.mjs --out results/latest-run.md --json results/latest-run.json",
+    "setup:legacy": "bash scripts/setup-legacy.sh"
+  },
+  "dependencies": {
+    "chrome-launcher": "^1.2.0",
+    "lighthouse": "^13.4.1"
+  }
+}
