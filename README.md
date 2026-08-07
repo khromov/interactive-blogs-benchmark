@@ -20,8 +20,7 @@ run per page (values are representative, not lab-grade — see [Caveats](#caveat
 
 | Framework | Model | JS gz | HTML gz | Avg score | Avg LCP | Avg TBT |
 |---|---|---|---|---|---|---|
-| **astro** | Preact islands | 5.4 KB (flat) | 29 → 253 KB | 90 | 2.7 s | 30 ms |
-| **iles** | Preact islands | 6.6 KB (flat) | 27 → 241 KB | 91 | 2.6 s | 42 ms |
+| **astro** † | Preact islands | 7.1 KB (flat) | 30 → 253 KB | 88 | 1.8 s | 407 ms |
 | **Mochi** | Svelte 5 islands | 18.5 KB (flat) | 29 → 254 KB | 89 | 2.7 s | 77 ms |
 | **SvelteKit latest** | Svelte 5, whole-page | 58 → 272 KB | 28 → 242 KB | 76 | 4.8 s | 0 ms\* |
 | **SvelteKit 2022** | Svelte 3, whole-page | 110 → 836 KB | 28 → 242 KB | 60 | 7.9 s | 518 ms |
@@ -35,17 +34,21 @@ everywhere; DOM ≈ 950 / 2500 / 7550 elements across the board.
 
 | Framework | JS p1 | JS p2 | JS p3 | HTML p1 | HTML p2 | HTML p3 | Avg score | Avg LCP | Avg CLS | Avg TBT |
 |---|---|---|---|---|---|---|---|---|---|---|
-| astro | 12.1 / 5.4 | 12.1 / 5.4 | 12.1 / 5.4 | 77.6 / 28.9 | 200.1 / 80.8 | 607.7 / 252.8 | 90 | 2730 ms | 0.000 | 30 ms |
-| iles | 14.6 / 6.6 | 14.6 / 6.6 | 14.6 / 6.6 | 74.3 / 27.4 | 191.5 / 76.8 | 582.1 / 240.5 | 91 | 2623 ms | 0.000 | 42 ms |
+| astro † | 15.9 / 7.1 | 15.9 / 7.1 | 15.9 / 7.1 | 82.2 / 30.4 | 205.2 / 81.9 | 614.7 / 252.9 | 88 | 1808 ms | 0.000 | 407 ms |
 | Mochi | 48.2 / 18.5 | 48.2 / 18.5 | 48.2 / 18.5 | 79.0 / 28.8 | 204.2 / 81.0 | 620.8 / 253.8 | 89 | 2652 ms | 0.000 | 77 ms |
 | SvelteKit latest | 148 / 58 | 268 / 108 | 665 / 272 | 76.7 / 28.0 | 196.0 / 77.4 | 593.8 / 241.6 | 76 | 4767 ms | 0.000 | 0 ms |
 | SvelteKit 2022 | 283 / 110 | 709 / 280 | 2124 / 836 | 75.9 / 27.8 | 195.2 / 77.4 | 593.0 / 241.8 | 60 | 7908 ms | 0.000 | 518 ms |
 
 </details>
 
+> † The **astro** row is a fresh Astro 7 + Preact build, re-measured in the dev container (single
+> run). Its JS/HTML byte columns are exact and machine-independent; its Lighthouse CWV (score/LCP/TBT)
+> come from a different environment than the other rows' earlier same-day run, so treat those as
+> indicative, not directly comparable. Run `npm run benchmark` to regenerate the whole table on one machine.
+
 ### Takeaways
 
-- **Islands ship a flat, tiny JS payload** regardless of post length (5–19 KB gz). The only thing
+- **Islands ship a flat, tiny JS payload** regardless of post length (7–19 KB gz). The only thing
   that grows is the HTML — same for everyone.
 - **Whole-page hydration scales with post length.** SvelteKit compiles the entire post into a
   hydrated component, so post3 ships 272 KB (Svelte 5) / 836 KB (Svelte 3) gzipped.
@@ -68,12 +71,13 @@ everywhere; DOM ≈ 950 / 2500 / 7550 elements across the board.
 | `frameworks/mochi` | Mochi + mdsvex | islands (`mochi:hydrate`) | this repo |
 | `frameworks/sveltekit-latest` | SvelteKit 2.7 + Svelte 5.56 + Vite 7 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
 | `frameworks/sveltekit-3` | SvelteKit 3.0.0-next.16 + Svelte 5.56 + Vite 8 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
-| `legacy/astro` | Astro 0.22 + Preact | islands | upstream (Node 16) |
-| `legacy/iles` | Iles 0.7 + Preact | islands | upstream |
-| `legacy/sveltekit_mdsvex` | SvelteKit next.245 + Svelte 3 | whole-page | upstream (Node 16) |
+| `frameworks/astro` | Astro 7 + Preact (`@astrojs/mdx`) | islands (`client:visible`) | this repo |
+| `frameworks/sveltekit-2022` | SvelteKit next.245 + Svelte 3 | whole-page | this repo — `build/` committed (rebuild needs Node 16) |
 
 `sveltekit-latest` is a fresh `npx sv create` project with [Ben McCann's PR #3](https://github.com/deklanw/interactive-blogs-benchmark/pull/3)
 routing/config layered on, the shared posts copied in, and components modernized to Svelte 5 runes.
+`astro` is a fresh `npm create astro@latest` project (Preact + MDX) with the shared posts converted to
+`.mdx`, each embedding one `<Counter client:visible />` island.
 
 ## How the script works
 
@@ -88,7 +92,7 @@ post it:
 then averages the Lighthouse metrics across posts and prints the condensed + full tables (and writes
 them to `results/latest-run.md` with `--out`). Unreachable/unbuilt targets are skipped with a note,
 so you can benchmark a subset. To skip built targets on purpose, pass `--skip name1,name2` (matched
-case-insensitively against the config names) — e.g. `--skip astro,iles` to compare only the
+case-insensitively against the config names) — e.g. `--skip astro,Mochi` to compare only the
 SvelteKit rows without touching the config.
 
 ## Reproducing
@@ -97,11 +101,14 @@ SvelteKit rows without touching the config.
 npm install                         # lighthouse + chrome-launcher (needs Chrome; set CHROME_PATH if needed)
 ```
 
-**Build the two in-repo frameworks** (Node 18+):
+**Build the modern in-repo frameworks** (Node 18+):
 
 ```sh
 # Mochi — runs as a server on :3335
 (cd frameworks/mochi && bun install && bun run build && PORT=3335 bun run start &)
+
+# Astro 7 + Preact — static build
+(cd frameworks/astro && npm install && npm run build)              # -> dist/
 
 # SvelteKit latest — static build
 (cd frameworks/sveltekit-latest && npm install && npm run build)   # -> build/
@@ -110,18 +117,12 @@ npm install                         # lighthouse + chrome-launcher (needs Chrome
 (cd frameworks/sveltekit-3 && npm install && npm run build)        # -> build/
 ```
 
-**Fetch + build the three legacy frameworks** (2022-era; astro & SvelteKit-2022 need **Node 16**):
+**SvelteKit 2022** (the 2022-era Svelte 3 baseline) ships its **`build/` committed**, so the
+benchmark runs with no legacy toolchain. Only rebuild if you change its sources — that step needs
+**Node 16 + pnpm 6** (the `site-test: link:` self-dep is already removed):
 
 ```sh
-npm run setup:legacy                # clones astro / iles / sveltekit_mdsvex into ./legacy
-
-(cd legacy/iles && bun install && bun run build)                   # Node 18+  -> dist/
-
-# astro 0.22 is Snowpack-based — build under Node 16:
-(cd legacy/astro && bun install && npx astro build)                # Node 16   -> dist/
-
-# SvelteKit 2022 (Svelte 3): remove the "site-test: link:" self-dep, then, under Node 16 + pnpm 6:
-(cd legacy/sveltekit_mdsvex && pnpm install --frozen-lockfile && pnpm run build)   # -> build/
+(cd frameworks/sveltekit-2022 && pnpm install --frozen-lockfile && pnpm run build)   # -> build/
 ```
 
 **Run it:**
@@ -129,7 +130,7 @@ npm run setup:legacy                # clones astro / iles / sveltekit_mdsvex int
 ```sh
 npm run benchmark                   # prints the tables; writes results/latest-run.md + .json
 node benchmark.mjs --posts post1,post3          # subset of posts
-node benchmark.mjs --skip astro,iles            # subset of frameworks (case-insensitive names)
+node benchmark.mjs --skip astro,Mochi           # subset of frameworks (case-insensitive names)
 ```
 
 Anything not built/running is simply skipped — e.g. `npm run benchmark` right after building only
@@ -163,7 +164,7 @@ and **Chrome** (for the Lighthouse run) — `npx @puppeteer/browsers install chr
 
 ## Credits
 
-- Original benchmark & the three legacy projects: **[Deklan Webster](https://github.com/deklanw/interactive-blogs-benchmark)**.
+- Original benchmark, the shared posts & the vendored SvelteKit-2022 project: **[Deklan Webster](https://github.com/deklanw/interactive-blogs-benchmark)**.
 - SvelteKit/Svelte-5 modernization: **[Ben McCann, PR #3](https://github.com/deklanw/interactive-blogs-benchmark/pull/3)**.
 - Mochi: **[mochi.fast](https://mochi.fast/)**.
 

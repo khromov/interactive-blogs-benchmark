@@ -5,11 +5,10 @@
     { "id": "post3", "words": "71k", "path": "/posts/post3/" }
   ],
   "frameworks": [
-    { "name": "astro", "model": "Preact islands", "dist": "legacy/astro/dist" },
-    { "name": "iles", "model": "Preact islands", "dist": "legacy/iles/dist" },
+    { "name": "astro", "model": "Preact islands", "dist": "frameworks/astro/dist" },
     { "name": "Mochi", "model": "Svelte 5 islands", "url": "http://localhost:3335" },
     { "name": "SvelteKit latest", "model": "Svelte 5, whole-page", "dist": "frameworks/sveltekit-latest/build" },
     { "name": "SvelteKit 3", "model": "Svelte 5, whole-page", "dist": "frameworks/sveltekit-3/build" },
-    { "name": "SvelteKit 2022", "model": "Svelte 3, whole-page", "dist": "legacy/sveltekit_mdsvex/build" }
+    { "name": "SvelteKit 2022", "model": "Svelte 3, whole-page", "dist": "frameworks/sveltekit-2022/build" }
   ]
 }

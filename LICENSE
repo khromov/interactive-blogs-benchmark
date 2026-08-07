@@ -22,8 +22,8 @@ SOFTWARE.
 
 ---
 
-The benchmark concept and the three "legacy" framework projects it measures
-(astro, iles, sveltekit_mdsvex) originate from Deklan Webster's
-interactive-blogs-benchmark (https://github.com/deklanw/interactive-blogs-benchmark)
-and are fetched from there by scripts/setup-legacy.sh rather than redistributed here.
+The benchmark concept, the shared blog posts, and the vendored SvelteKit-2022
+project (frameworks/sveltekit-2022, originally sveltekit_mdsvex) originate from
+Deklan Webster's interactive-blogs-benchmark
+(https://github.com/deklanw/interactive-blogs-benchmark).
 The SvelteKit-latest setup adapts the modernization from PR #3 by Ben McCann.

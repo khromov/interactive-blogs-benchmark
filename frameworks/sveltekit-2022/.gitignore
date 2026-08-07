@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+# /build is intentionally committed here (2022 baseline needs Node 16 + pnpm 6 to
+# rebuild) so the benchmark runs with no legacy toolchain. Rebuild: see README.
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+.vscode
