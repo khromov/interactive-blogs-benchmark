@@ -72,7 +72,7 @@ everywhere; DOM ≈ 950 / 2500 / 7550 elements across the board.
 | `frameworks/sveltekit-latest` | SvelteKit 2.7 + Svelte 5.56 + Vite 7 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
 | `frameworks/sveltekit-3` | SvelteKit 3.0.0-next.16 + Svelte 5.56 + Vite 8 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
 | `frameworks/astro` | Astro 7 + Preact (`@astrojs/mdx`) | islands (`client:visible`) | this repo |
-| `frameworks/sveltekit-2022` | SvelteKit next.245 + Svelte 3 | whole-page | this repo (upstream, Node 16) |
+| `frameworks/sveltekit-2022` | SvelteKit next.245 + Svelte 3 | whole-page | this repo — `build/` committed (rebuild needs Node 16) |
 
 `sveltekit-latest` is a fresh `npx sv create` project with [Ben McCann's PR #3](https://github.com/deklanw/interactive-blogs-benchmark/pull/3)
 routing/config layered on, the shared posts copied in, and components modernized to Svelte 5 runes.
@@ -117,10 +117,11 @@ npm install                         # lighthouse + chrome-launcher (needs Chrome
 (cd frameworks/sveltekit-3 && npm install && npm run build)        # -> build/
 ```
 
-**Build SvelteKit 2022** (the 2022-era Svelte 3 baseline — needs **Node 16 + pnpm 6**):
+**SvelteKit 2022** (the 2022-era Svelte 3 baseline) ships its **`build/` committed**, so the
+benchmark runs with no legacy toolchain. Only rebuild if you change its sources — that step needs
+**Node 16 + pnpm 6** (the `site-test: link:` self-dep is already removed):
 
 ```sh
-# vendored in-repo; the "site-test: link:" self-dep has already been removed.
 (cd frameworks/sveltekit-2022 && pnpm install --frozen-lockfile && pnpm run build)   # -> build/
 ```
 

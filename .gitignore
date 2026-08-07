@@ -13,3 +13,8 @@ frameworks/*/dist/
 frameworks/*/.astro/
 frameworks/*/.svelte-kit/
 frameworks/*/.mochi/
+
+# ...except the SvelteKit-2022 build, which is committed so running the benchmark
+# needs no Node 16 / pnpm 6 toolchain (rebuild instructions in README).
+!frameworks/sveltekit-2022/build/
+!frameworks/sveltekit-2022/build/**

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="../favicon.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="content-security-policy" content="">
+	<link rel="stylesheet" href="/_app/assets/pages/__layout.svelte-5ab78719.css">
+	<link rel="modulepreload" href="/_app/start-b34a8760.js">
+	<link rel="modulepreload" href="/_app/chunks/vendor-f78267d5.js">
+	<link rel="modulepreload" href="/_app/chunks/preload-helper-ec9aa979.js">
+	<link rel="modulepreload" href="/_app/pages/__layout.svelte-10e5a0ae.js">
+	<link rel="modulepreload" href="/_app/pages/about.svx-adb93f38.js"><script type="module">
+		import { start } from "/_app/start-b34a8760.js";
+		start({
+			target: document.querySelector("#svelte"),
+			paths: {"base":"","assets":""},
+			session: {},
+			route: true,
+			spa: false,
+			trailing_slash: "always",
+			hydrate: {
+				status: 200,
+				error: null,
+				nodes: [
+					import("/_app/pages/__layout.svelte-10e5a0ae.js"),
+						import("/_app/pages/about.svx-adb93f38.js")
+				],
+				url: new URL("http://sveltekit-prerender/about/"),
+				params: {}
+			}
+		});
+	</script>
+</head>
+
+<body>
+	<div id="svelte">
+
+
+<div class="min-h-screen flex flex-col items-center justify-between bg-gray-200"><div class="m-10 w-1/2 flex justify-around align-top items-middle"><header class="text-2xl"><a href="/">Your Website</a></header>
+
+		<nav class="w-40"><ul class="flex flex-row justify-around"><li><a href="/about">About</a></li></ul></nav></div>
+
+	<main class="flex-grow m-4 w-1/2"><h1>My about page</h1>
+<p>Lorem ipsum </p></main>
+
+	<footer class="p-10">Footer info goes here</footer></div>
+
+</div>
+</body>
+
+</html>
