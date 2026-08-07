@@ -13,10 +13,10 @@
 //
 // Usage:  node benchmark.mjs [--config frameworks.config.json] [--out results/results.md]
 //                            [--posts post1,post3] [--json results/results.json] [--gzip]
-//                            [--skip astro,iles]
+//                            [--skip astro,Mochi]
 //
 // --skip drops framework targets by name (case-insensitive, comma-separated) before the run —
-// e.g. `--skip astro,iles` to focus on a subset without editing the config. It's additive: the
+// e.g. `--skip astro,Mochi` to focus on a subset without editing the config. It's additive: the
 // implicit "skip when a target's build/server is missing" behaviour is unchanged.
 // Requires: Chrome/Chromium (set CHROME_PATH if not auto-detected), and `npm install`.
 //

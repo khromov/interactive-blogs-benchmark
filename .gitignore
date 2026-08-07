@@ -1,5 +1,4 @@
 node_modules/
-legacy/
 results/latest-run.*
 *.log
 .DS_Store
@@ -10,5 +9,7 @@ chrome/
 # framework build artifacts / installed deps
 frameworks/*/node_modules/
 frameworks/*/build/
+frameworks/*/dist/
+frameworks/*/.astro/
 frameworks/*/.svelte-kit/
 frameworks/*/.mochi/
