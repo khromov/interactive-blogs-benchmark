@@ -9,6 +9,7 @@
     { "name": "iles", "model": "Preact islands", "dist": "legacy/iles/dist" },
     { "name": "Mochi", "model": "Svelte 5 islands", "url": "http://localhost:3335" },
     { "name": "SvelteKit latest", "model": "Svelte 5, whole-page", "dist": "frameworks/sveltekit-latest/build" },
+    { "name": "SvelteKit 3", "model": "Svelte 5, whole-page", "dist": "frameworks/sveltekit-3/build" },
     { "name": "SvelteKit 2022", "model": "Svelte 3, whole-page", "dist": "legacy/sveltekit_mdsvex/build" }
   ]
 }

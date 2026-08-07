@@ -67,6 +67,7 @@ everywhere; DOM ≈ 950 / 2500 / 7550 elements across the board.
 |---|---|---|---|
 | `frameworks/mochi` | Mochi + mdsvex | islands (`mochi:hydrate`) | this repo |
 | `frameworks/sveltekit-latest` | SvelteKit 2.7 + Svelte 5.56 + Vite 7 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
+| `frameworks/sveltekit-3` | SvelteKit 3.0.0-next.16 + Svelte 5.56 + Vite 8 + mdsvex 0.12 | whole-page (adapter-static, prerendered) | this repo |
 | `legacy/astro` | Astro 0.22 + Preact | islands | upstream (Node 16) |
 | `legacy/iles` | Iles 0.7 + Preact | islands | upstream |
 | `legacy/sveltekit_mdsvex` | SvelteKit next.245 + Svelte 3 | whole-page | upstream (Node 16) |
@@ -86,7 +87,9 @@ post it:
 
 then averages the Lighthouse metrics across posts and prints the condensed + full tables (and writes
 them to `results/latest-run.md` with `--out`). Unreachable/unbuilt targets are skipped with a note,
-so you can benchmark a subset.
+so you can benchmark a subset. To skip built targets on purpose, pass `--skip name1,name2` (matched
+case-insensitively against the config names) — e.g. `--skip astro,iles` to compare only the
+SvelteKit rows without touching the config.
 
 ## Reproducing
 
@@ -102,6 +105,9 @@ npm install                         # lighthouse + chrome-launcher (needs Chrome
 
 # SvelteKit latest — static build
 (cd frameworks/sveltekit-latest && npm install && npm run build)   # -> build/
+
+# SvelteKit 3 (3.0.0-next.16) — static build
+(cd frameworks/sveltekit-3 && npm install && npm run build)        # -> build/
 ```
 
 **Fetch + build the three legacy frameworks** (2022-era; astro & SvelteKit-2022 need **Node 16**):
@@ -122,11 +128,29 @@ npm run setup:legacy                # clones astro / iles / sveltekit_mdsvex int
 
 ```sh
 npm run benchmark                   # prints the tables; writes results/latest-run.md + .json
-node benchmark.mjs --posts post1,post3          # subset
+node benchmark.mjs --posts post1,post3          # subset of posts
+node benchmark.mjs --skip astro,iles            # subset of frameworks (case-insensitive names)
 ```
 
 Anything not built/running is simply skipped — e.g. `npm run benchmark` right after building only
 `sveltekit-latest` will report just that row.
+
+## Dev container
+
+A minimal `.devcontainer/` is included (Ubuntu base + Node + GitHub CLI). Open the repo in a
+dev container ("Reopen in Container") and you get a clean toolchain. It forwards enough ports to run
+every framework server **at once** — Mochi on `3335`, plus `vite preview`/`vite dev` slots on
+`4173–4175` / `5173–5175` for `sveltekit-latest` and `sveltekit-3` side by side:
+
+```sh
+(cd frameworks/sveltekit-latest && npm install && npm run build && npm run preview -- --port 4173 &)
+(cd frameworks/sveltekit-3     && npm install && npm run build && npm run preview -- --port 4174 &)
+(cd frameworks/mochi           && bun install && bun run build && PORT=3335 bun run start &)   # needs bun
+```
+
+Two extras the base image doesn't ship: **bun** (for Mochi) — `curl -fsSL https://bun.sh/install | bash`;
+and **Chrome** (for the Lighthouse run) — `npx @puppeteer/browsers install chrome@stable` then export
+`CHROME_PATH` to the printed binary. With those in place, `npm run benchmark` works inside the container.
 
 ## Caveats
 
