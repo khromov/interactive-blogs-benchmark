@@ -13,6 +13,11 @@
 //
 // Usage:  node benchmark.mjs [--config frameworks.config.json] [--out results/results.md]
 //                            [--posts post1,post3] [--json results/results.json] [--gzip]
+//                            [--skip astro,iles]
+//
+// --skip drops framework targets by name (case-insensitive, comma-separated) before the run —
+// e.g. `--skip astro,iles` to focus on a subset without editing the config. It's additive: the
+// implicit "skip when a target's build/server is missing" behaviour is unchanged.
 // Requires: Chrome/Chromium (set CHROME_PATH if not auto-detected), and `npm install`.
 //
 // --gzip makes the run use Content-Encoding: gzip; without it, everything is served
@@ -48,6 +53,7 @@ function parseArgs(argv) {
 		else if (a === '--out') args.out = argv[++i];
 		else if (a === '--json') args.json = argv[++i];
 		else if (a === '--posts') args.posts = argv[++i].split(',');
+		else if (a === '--skip') args.skip = argv[++i].split(',');
 		else if (a === '--gzip') args.gzip = true;
 	}
 	return args;
@@ -246,6 +252,11 @@ async function main() {
 	const cfg = JSON.parse(readFileSync(resolve(ROOT, args.config), 'utf8'));
 	const posts = args.posts ? cfg.posts.filter((p) => args.posts.includes(p.id)) : cfg.posts;
 
+	// --skip drops targets by name before the run (case-insensitive), mirroring --posts. Without
+	// it every configured framework is attempted; missing builds/servers are still auto-skipped.
+	const skip = new Set((args.skip ?? []).map((s) => s.toLowerCase()));
+	const frameworks = cfg.frameworks.filter((fw) => !skip.has(fw.name.toLowerCase()));
+
 	// One encoding for the whole run, requested by the client, honoured by every server.
 	// 'identity' is the HTTP token for "send it uncompressed" — omitting the header instead
 	// would let each server pick, which is exactly the mismatch we're avoiding.
@@ -258,7 +269,7 @@ async function main() {
 
 	const results = [];
 	try {
-		for (const fw of cfg.frameworks) {
+		for (const fw of frameworks) {
 			const r = await measureFramework(fw, posts, chrome.port, { acceptEncoding });
 			if (r) results.push(r);
 		}

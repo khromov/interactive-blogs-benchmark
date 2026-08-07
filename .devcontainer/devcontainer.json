@@ -1,0 +1,22 @@
+{
+  "name": "interactive-blogs-benchmark",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway"
+  ],
+  "// forwardPorts": "Room to run every framework server at once: Mochi (3335), vite preview (4173-4175) and vite dev (5173-5175) for sveltekit-latest + sveltekit-3 side by side.",
+  "forwardPorts": [3335, 4173, 4174, 4175, 5173, 5174, 5175],
+  "portsAttributes": {
+    "3335": { "label": "Mochi", "onAutoForward": "notify" },
+    "4173": { "label": "vite preview (sveltekit-latest)" },
+    "4174": { "label": "vite preview (sveltekit-3)" },
+    "4175": { "label": "vite preview (spare)" },
+    "5173": { "label": "vite dev (sveltekit-latest)" },
+    "5174": { "label": "vite dev (sveltekit-3)" },
+    "5175": { "label": "vite dev (spare)" }
+  }
+}

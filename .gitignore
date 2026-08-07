@@ -4,6 +4,9 @@ results/latest-run.*
 *.log
 .DS_Store
 
+# locally-provisioned Chrome for the Lighthouse run (see README dev container note)
+chrome/
+
 # framework build artifacts / installed deps
 frameworks/*/node_modules/
 frameworks/*/build/
